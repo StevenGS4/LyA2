@@ -1,0 +1,27 @@
+
+ iniciar
+     
+     velocidad tipo numero = 7
+ sensor_frontal tipo Sensor = 7
+     contador tipo numero = 01
+      val_sensor tipo numero = leer_sensor sensor_frontal
+	i tipo numero = 12
+
+
+
+	velocidad = leer_sensor sensor_frontal
+     para l=i hasta velocidad hacer
+         contador = contador + 1
+         si val_sensor < 200 entonces
+             encender_led verde
+romper
+             mover_adelante velocidad
+             esperar 1 segundos
+         fin si
+         girar_derecha 120+6
+     fin para
+
+
+     apagar_led azul
+     romper
+ Terminar

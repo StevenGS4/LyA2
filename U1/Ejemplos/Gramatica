@@ -1,0 +1,85 @@
+<programa> ::= "iniciar" <declaraciones> <instrucciones> "Terminar"
+
+<declaraciones> ::= <declaracion> <declaraciones> 
+                 | ε
+
+<declaracion> ::= <declaracion_numero> 
+               | <declaracion_sensor>
+               
+========================================================
+
+                |declaracion_metodo
+
+<declaracion_metodo> :: = "iniciar_metodo" <identificador> "("  <parametros>  ")"<declaraciones> <instrucciones>  "fin_metodo"
+
+<parametrounico> :: = <identificador> ("tipo numero"| "tipo Sensor")
+
+<parametros> :: = <parametrounico> (ε |"," <parametros>  )
+
+
+========================================================
+
+
+
+<declaracion_numero> ::= <identificador> "tipo" "numero" "=" <expresion>
+
+<declaracion_sensor> ::= <identificador> "tipo" "Sensor" "=" <numero>
+
+<instrucciones> ::= <instruccion> <instrucciones> 
+                 | ε
+
+<instruccion> ::= <comando_movimiento> 
+               | <comando_actuador> 
+               | <comando_tiempo> 
+               | <estructura_control> 
+               | <asignacion> 
+               | <comando_control>
+               | <usar_metodo>
+
+<usar_metodo>::= <identificador> "(" (parametros | ε) ")"
+
+<comando_movimiento> ::= ("mover_adelante" | "mover_atras" | "girar_izquierda" | "girar_derecha") <expresion>
+
+<comando_actuador> ::= ("encender_led" | "apagar_led") <identificador>
+
+<comando_tiempo> ::= "esperar" <expresion> <unidad_tiempo>
+
+<unidad_tiempo> ::= "segundos" | "milisegundos"
+
+<estructura_control> ::= <bloque_si> 
+                      | <bloque_para> 
+                      | <bloque_mientras>
+
+<bloque_si> ::= "si" <condicion> "entonces" <instrucciones> "fin si"
+
+<bloque_para> ::= "para" <identificador> "=" <expresion> "hasta" <expresion> "hacer" <instrucciones> "fin para"
+
+<bloque_mientras> ::= "mientras" <condicion> "hacer" <instrucciones> "fin mientras"
+
+<condicion> ::= <expresion> <operador_relacional> <expresion>
+
+<operador_relacional> ::= "<" | ">" | "<=" | ">=" | "==" | "!="
+
+<asignacion> ::= <identificador> "=" <expresion>
+
+<comando_control> ::= "romper" | "detener"
+
+<expresion> ::= <termino> 
+             | <expresion> "+" <termino> 
+             | <expresion> "-" <termino>
+
+<termino> ::= <factor> 
+           | <termino> "*" <factor> 
+           | <termino> "/" <factor>
+
+<factor> ::= <numero> 
+          | <identificador> 
+          | "(" <expresion> ")" 
+          | <leer_sensor>
+
+<leer_sensor> ::= "leer_sensor" <identificador>
+
+<numero> ::= NUMERO
+
+<identificador> ::= IDENTIFICADOR
+

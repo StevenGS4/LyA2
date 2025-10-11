@@ -1,0 +1,11 @@
+iniciar 
+
+si 5 < 7 entonces
+encender_led azul
+apagar_led azul
+si 4<6 entonces
+encender_led rojo
+apagar_led rojo
+fin si
+fin si
+Terminar

@@ -1,0 +1,47 @@
+iniciar
+
+distancia tipo numero = 0
+temperatura tipo numero = 0
+sensor_distancia tipo Sensor = 1
+sensor_temperatura tipo Sensor = 2
+
+
+encender_led rojo
+esperar 2 segundos
+encender_led azul
+
+distancia = leer_sensor sensor_distancia
+si distancia<30 entonces
+ mover_adelante 5
+girar_izquierda 45
+esperar 2 segundos
+mover_atras 5
+girar_izquierda 90
+esperar 2 segundos
+mover_adelante 5
+girar_izquierda 90
+esperar 2 segundos
+mover_adelante 5
+girar_izquierda 90
+esperar 2 segundos
+mover_adelante 5
+girar_izquierda 90
+esperar 2 segundos
+mover_adelante 5
+encender_led rojo
+esperar 2 segundos
+fin si
+
+mientras 1 < 5 hacer
+encender_led rojo
+mover_adelante 2
+girar_izquierda 30
+mover_adelante 5
+encender_led azul
+girar_derecha 30
+mover_adelante 5
+
+fin mientras
+
+
+Terminar
