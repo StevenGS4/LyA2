@@ -1,0 +1,308 @@
+#📘 MANUAL DE MINI-ROBOT-CODE
+
+ ## ▸ ESTRUCTURA BÁSICA:
+ Todo programa debe iniciar con la palabra clave 'iniciar' y finalizar con 'Terminar' (con T mayúscula).
+ Estas indican el inicio y el fin del código del robot.
+
+ **Gramática:** `<programa> ::= "iniciar" <declaraciones> <instrucciones> "Terminar"`
+
+ **Ejemplo:**
+
+ iniciar
+     ...declaraciones...
+     ...instrucciones...
+ Terminar
+
+
+ ## ▸ DECLARACIONES DE VARIABLES:
+ Antes de usar variables, deben declararse especificando su tipo.
+
+ Variables numéricas:
+
+ <identificador> tipo numero = <expresion>
+
+
+ Sensores:
+
+ <identificador> tipo Sensor = <puerto>
+
+
+ Gramática:
+ <declaracion_numero> ::= <identificador> "tipo" "numero" "=" <expresion>
+ <declaracion_sensor> ::= <identificador> "tipo" "Sensor" "=" <numero>
+
+ Ejemplos:
+
+ velocidad tipo numero = 10
+ contador tipo numero = 5 + 3
+ sensor1 tipo Sensor = 1
+ sensor_distancia tipo Sensor = 2
+
+
+ ## ▸ EXPRESIONES ARITMÉTICAS:
+ Puedes realizar cálculos matemáticos con precedencia de operadores.
+
+ Operadores: +, -, *, /
+ Precedencia: () > *, / > +, -
+
+ Gramática:
+ <expresion> ::= <termino> | <expresion> ("+" | "-") <termino>
+ <termino> ::= <factor> | <termino> ("*" | "/") <factor>
+ <factor> ::= <numero> | <identificador> | "(" <expresion> ")" | <leer_sensor>
+
+ Ejemplos:
+
+ resultado tipo numero = (5 + 3) * 2
+ distancia tipo numero = velocidad / 2
+ calculo tipo numero = leer_sensor sensor1 + 10
+
+
+ ## ▸ MOVIMIENTOS:
+ Comandos que mueven o rotan al robot. Aceptan expresiones como parámetros.
+
+ Comandos disponibles:
+ mover_adelante <expresion>` → Avanza hacia adelante
+ mover_atras <expresion>` → Retrocede
+ girar_izquierda <expresion>` → Gira a la izquierda (grados)
+ girar_derecha <expresion>` → Gira a la derecha (grados)
+
+ Gramática:
+ <comando_movimiento> ::= ("mover_adelante" | "mover_atras" | "girar_izquierda" | "girar_derecha") <expresion>
+
+ Ejemplos:
+
+ mover_adelante 10
+ mover_adelante velocidad
+ girar_derecha velocidad * 2
+ mover_atras leer_sensor sensor1
+
+
+ ## ▸ ACTUADORES:
+ Controlan salidas como LEDs. Requieren un identificador de color.
+
+ Comandos disponibles:
+ encender_led <identificador>` → Enciende el LED del color indicado
+ apagar_led <identificador>` → Apaga el LED del color indicado
+
+ Gramática:
+<comando_actuador> ::= ("encender_led" | "apagar_led") <identificador>
+
+ Colores válidos: rojo, verde, azul, amarillo, blanco
+
+ Ejemplos:
+
+ encender_led rojo
+ apagar_led verde
+ encender_led amarillo
+
+
+ ## ▸ TIEMPO:
+ El comando 'esperar' pausa temporalmente el robot.
+
+ Sintaxis:
+ esperar <expresion> <unidad>`
+ <expresion>: cantidad de tiempo (puede ser un cálculo)
+ <unidad>: segundos | milisegundos
+
+ Gramática:
+ <comando_tiempo> ::= "esperar" <expresion> <unidad_tiempo>
+
+ Ejemplos:
+
+ esperar 2 segundos
+ esperar 500 milisegundos
+ esperar velocidad * 100 milisegundos
+ esperar leer_sensor sensor1 segundos
+
+
+ ## ▸ SENSORES:
+ Leen valores del hardware del robot para usarse en cálculos y condiciones.
+
+ Sintaxis: leer_sensor <identificador>
+
+ Gramática:
+ <leer_sensor> ::= "leer_sensor" <identificador>
+
+ Ejemplo:
+
+ sensor_frontal tipo Sensor = 1
+ si leer_sensor sensor_frontal > 20 entonces
+     mover_adelante 5
+ fin si
+
+
+ ## ▸ ASIGNACIONES:
+ Modifican el valor de variables ya declaradas.
+
+ Sintaxis: `identificador> = <expresion>
+
+ Gramática:
+ <asignacion> ::= <identificador> "=" <expresion>
+
+ Ejemplos:
+
+ contador = contador + 1
+ velocidad = leer_sensor sensor1 * 2
+ resultado = (a + b) / 2
+
+
+ ## ▸ ESTRUCTURAS DE CONTROL:
+
+ ### Condicionales (si-entonces):
+ Ejecuta código solo si se cumple una condición.
+
+ Sintaxis:
+
+ si <condicion> entonces
+     <instrucciones>
+ fin si
+
+
+ Gramática: <bloque_si> ::= "si" <condicion> "entonces" <instrucciones> "fin si"
+
+ Operadores relacionales: <, >, <=, >=, ==, !=
+
+ Gramática de condición: <condicion> ::= <expresion> <operador_relacional> <expresion>
+
+ ### Bucles para:
+ Repite código un número determinado de veces.
+
+ Sintaxis:
+
+ para <variable> = <inicio> hasta <fin> hacer
+     <instrucciones>
+ fin para
+
+
+ Gramática:
+ <bloque_para> ::= "para" <identificador> "=" <expresion> "hasta" <expresion> "hacer" <instrucciones> "fin para"
+
+ ### Bucles mientras:
+ Repite código mientras se cumpla una condición.
+
+ Sintaxis:
+
+ mientras <condicion> hacer
+     <instrucciones>
+ fin mientras
+
+
+ Gramática: <bloque_mientras> ::= "mientras" <condicion> "hacer" <instrucciones> "fin mientras"
+
+ Ejemplos de estructuras:
+
+ si velocidad > 10 entonces
+     encender_led verde
+     mover_adelante velocidad / 2
+ fin si
+
+ para i = 1 hasta 5 hacer
+     girar_derecha 72
+     mover_adelante 10
+ fin para
+
+ mientras leer_sensor sensor1 < 50 hacer
+     mover_adelante 5
+     esperar 100 milisegundos
+ fin mientras
+
+
+ ## ▸ COMANDOS DE CONTROL DE FLUJO:
+ romper → Sale del bucle actual
+ detener → Detiene TODAS las operaciones
+
+ Gramática: <comando_control> ::= "romper" | "detener"
+
+ ## ▸ COMENTARIOS:
+ Agregan documentación al código sin afectar la ejecución.
+
+ Sintaxis: // comentario o # comentario
+
+ Ejemplos
+
+ // Este es un comentario de línea
+ velocidad tipo numero = 10  // Comentario al final de línea
+ # También puedes usar numeral
+
+
+ ## ▸ REGLAS IMPORTANTES:
+ - Usa siempre 'iniciar' al principio y 'Terminar' al final del programa
+ - Declara todas las variables antes de usarlas
+ - Cada instrucción debe ir en una línea separada
+ - Cierra correctamente todos los bloques: 'fin si', 'fin para', 'fin mientras'
+ - Los nombres de variables deben empezar con letra o guión bajo
+ - Las expresiones pueden anidarse con paréntesis para cambiar precedencia
+
+ ## ▸ EJEMPLO COMPLETO:
+ ```
+ iniciar
+     // Declaraciones
+     velocidad tipo numero = 15
+     sensor_frontal tipo Sensor = 1
+     contador tipo numero = 0
+
+     // Bucle principal
+     para i = 1 hasta 3 hacer
+         contador = contador + 1
+         si leer_sensor sensor_frontal > 20 entonces
+             encender_led verde
+             mover_adelante velocidad
+             esperar 1 segundos
+         fin si
+         girar_derecha 120
+     fin para
+
+     // Finalización
+     apagar_led verde
+     detener
+ Terminar
+
+
+ ## ▸ GRAMÁTICA COMPLETA DEL LENGUAJE:
+
+ <programa> ::= "iniciar" <declaraciones> <instrucciones> "Terminar"
+
+ <declaraciones> ::= <declaracion> <declaraciones> | ε
+ <declaracion> ::= <declaracion_numero> | <declaracion_sensor>
+ <declaracion_numero> ::= <identificador> "tipo" "numero" "=" <expresion>
+ <declaracion_sensor> ::= <identificador> "tipo" "Sensor" "=" <numero>
+
+ <instrucciones> ::= <instruccion> <instrucciones> | ε
+ <instruccion> ::= <comando_movimiento> | <comando_actuador> | <comando_tiempo> |
+                   <estructura_control> | <asignacion> | <comando_control>
+
+ <comando_movimiento> ::= ("mover_adelante" | "mover_atras" | "girar_izquierda" | "girar_derecha") <expresion>
+ <comando_actuador> ::= ("encender_led" | "apagar_led") <identificador>
+ <comando_tiempo> ::= "esperar" <expresion> <unidad_tiempo>
+ <comando_control> ::= "romper" | "detener"
+
+ <estructura_control> ::= <bloque_si> | <bloque_para> | <bloque_mientras>
+ <bloque_si> ::= "si" <condicion> "entonces" <instrucciones> "fin si"
+ <bloque_para> ::= "para" <identificador> "=" <expresion> "hasta" <expresion> "hacer" <instrucciones> "fin para"
+ <bloque_mientras> ::= "mientras" <condicion> "hacer" <instrucciones> "fin mientras"
+
+ <condicion> ::= <expresion> <operador_relacional> <expresion>
+ <operador_relacional> ::= "<" | ">" | "<=" | ">=" | "==" | "!="
+
+ <asignacion> ::= <identificador> "=" <expresion>
+
+ <expresion> ::= <termino> | <expresion> ("+" | "-") <termino>
+ <termino> ::= <factor> | <termino> ("*" | "/") <factor>
+ <factor> ::= <numero> | <identificador> | "(" <expresion> ")" | <leer_sensor>
+
+ <leer_sensor> ::= "leer_sensor" <identificador>
+ <unidad_tiempo> ::= "segundos" | "milisegundos"
+ <numero> ::= [0-9]+(.[0-9]+)?
+ <identificador> ::= [a-zA-Z_][a-zA-Z_0-9]*
+
+
+
+
+ Revisa tu código antes de ejecutar. Errores comunes:
+ - Olvidar declarar variables antes de usarlas
+ - No cerrar bloques con 'fin si', 'fin para', o 'fin mientras'
+ - Usar 'fin' en lugar de 'Terminar' al final del programa
+ - Comandos sin parámetros o parámetros incorrectos
+ - Paréntesis desbalanceados en expresiones
+
+ Para soporte técnico: +52 334 410 54 27
