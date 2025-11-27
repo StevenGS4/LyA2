@@ -1,6 +1,7 @@
 
 // Nuevo archivo: InstruccionTAC.java
 public class InstruccionTAC {
+
     public String operacion;
     public String resultado;
     public String arg1;
@@ -16,12 +17,12 @@ public class InstruccionTAC {
     public InstruccionTAC(String operacion, String resultado, String arg1) {
         this(operacion, resultado, arg1, null);
     }
-    
+
     public InstruccionTAC(String operacion, String arg1) {
         this(operacion, null, arg1, null);
     }
-    
-     public InstruccionTAC(String operacion) {
+
+    public InstruccionTAC(String operacion) {
         this(operacion, null, null, null);
     }
 
@@ -56,17 +57,40 @@ public class InstruccionTAC {
     public void setArg2(String arg2) {
         this.arg2 = arg2;
     }
-     
-     
+
+    public InstruccionTAC copia() {
+        return new InstruccionTAC(
+                this.operacion,
+                this.resultado,
+                this.arg1,
+                this.arg2
+        );
+    }
 
     @Override
     public String toString() {
-        if (arg2 != null) {
-            return resultado + " = " + arg1 + " " + operacion + " " + arg2;
-        } else if (resultado != null) {
-            return resultado + " = " + operacion + " " + arg1;
-        } else {
+
+        if (operacion != null && arg2 != null) {
+            return operacion + " " + arg1 + " " + arg2;
+        }
+
+        if (operacion != null && arg1 != null && resultado == null) {
             return operacion + " " + arg1;
         }
+
+        if (operacion == null && resultado != null && arg1 != null) {
+            return resultado + " = " + arg1;
+        }
+
+        if (operacion != null && arg1 != null) {
+            return resultado + " = " + operacion + " " + arg1;
+        }
+
+        if (operacion != null) {
+            return operacion;
+        }
+
+        return "(instruccion vacía)";
     }
+
 }

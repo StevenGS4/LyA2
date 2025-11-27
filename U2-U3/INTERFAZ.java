@@ -262,6 +262,7 @@ public class INTERFAZ extends javax.swing.JFrame {
         JMAnalsisXSemantico = new javax.swing.JMenu();
         JMAnalisisSemantico = new javax.swing.JMenu();
         JMTraducirPrograma = new javax.swing.JMenu();
+        JMOptimizador = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("COMPILADOR");
@@ -497,6 +498,14 @@ public class INTERFAZ extends javax.swing.JFrame {
             }
         });
         JBMBarra.add(JMTraducirPrograma);
+
+        JMOptimizador.setText("Optimizador");
+        JMOptimizador.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JMOptimizadorMouseClicked(evt);
+            }
+        });
+        JBMBarra.add(JMOptimizador);
 
         setJMenuBar(JBMBarra);
 
@@ -916,72 +925,72 @@ public class INTERFAZ extends javax.swing.JFrame {
     }//GEN-LAST:event_JMEjecutarMouseClicked
 
     private void JMAnalisisSemanticoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JMAnalisisSemanticoMouseClicked
-       if(generador ==null){
-           JOptionPane.showMessageDialog(null,
-                   "Es necesario compilar el programa antes");
-           
-       }
-       JTAConsola.setText("Cuadruplos generados");
-       mostrarCuadruplosEnTabla(generador);
+        if (generador == null) {
+            JOptionPane.showMessageDialog(null,
+                    "Es necesario compilar el programa antes");
+
+        }
+        JTAConsola.setText("Cuadruplos generados");
+        mostrarCuadruplosEnTabla(generador);
     }//GEN-LAST:event_JMAnalisisSemanticoMouseClicked
 
     private void JMTraducirProgramaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JMTraducirProgramaMouseClicked
-        String codigoFuenteDePrueba = JTAEditotText.getText();
-
-        try {
-
-            List<Analizador.Token> tokens = Analizador.analizarLexico(codigoFuenteDePrueba);
-
-            // Verificar errores léxicos
-            StringBuilder erroresLexicos = new StringBuilder();
-            for (Analizador.Token token : tokens) {
-                if ("ERROR LEXICO".equals(token.tipo)) {
-                    erroresLexicos.append("Error léxico: '").append(token.lexema)
-                            .append("' en línea ").append(token.linea).append("\n");
-                }
-            }
-            if (erroresLexicos.length() > 0) {
-                System.err.println("Errores durante el análisis léxico:\n" + erroresLexicos.toString());
-                return;
-            }
-
-            List<Analizador.EntradaTablaSimbolos> tablaSimbolos = Analizador.getTablaSimbolosCompleta();
-
-            // Instancia el AnalizadorSintactico
-            AnalizadorSintactico analizadorSintactico
-                    = new AnalizadorSintactico(tokens, tablaSimbolos);
-
-            // Solo parsear el código para obtener el AST
-            ProgramaNodo programaAST = analizadorSintactico.parsear(tokens, tablaSimbolos);
-
-            if (analizadorSintactico.getErrores().length() > 0) {
-                System.err.println("Errores durante la compilación:\n");
-                System.err.println(analizadorSintactico.getErrores().toString());
-            } else if (programaAST != null) {
-                System.out.println("Análisis sintáctico completado con éxito.\n");
-
-                // === Generación de Código Intermedio (TAC) ===
-                System.out.println("--- Generando Código Intermedio (Cuádruplos) ---\n");
-                GeneradorCodigoIntermedio generadorCodigoIntermedio = new GeneradorCodigoIntermedio();
-                // Pasa el generador al AST para que genere el código
-                programaAST.generaCodigoIntermedio(generadorCodigoIntermedio);
-
-                List<InstruccionTAC> cuadruplos = generadorCodigoIntermedio.getCodigo();
-                generadorCodigoIntermedio.imprimirCuadruplosEnTabla();
-
-                System.out.println("\n--- Generando Código Ensamblador para EMU8086 ---");
-                List<Analizador.EntradaTablaSimbolos> tablaSimbolosCompleta = Analizador.getTablaSimbolosCompleta();
-
-            } else {
-                System.err.println("Error desconocido: No se pudo construir el AST.");
-            }
-
-        } catch (Exception e) {
-            System.err.println("¡Ocurrió un error inesperado durante la compilación!");
-            e.printStackTrace();
-        }
-
-        System.out.println("\n--- Proceso de Compilación Finalizado ---");
+//        String codigoFuenteDePrueba = JTAEditotText.getText();
+//
+//        try {
+//
+//            List<Analizador.Token> tokens = Analizador.analizarLexico(codigoFuenteDePrueba);
+//
+//            // Verificar errores léxicos
+//            StringBuilder erroresLexicos = new StringBuilder();
+//            for (Analizador.Token token : tokens) {
+//                if ("ERROR LEXICO".equals(token.tipo)) {
+//                    erroresLexicos.append("Error léxico: '").append(token.lexema)
+//                            .append("' en línea ").append(token.linea).append("\n");
+//                }
+//            }
+//            if (erroresLexicos.length() > 0) {
+//                System.err.println("Errores durante el análisis léxico:\n" + erroresLexicos.toString());
+//                return;
+//            }
+//
+//            List<Analizador.EntradaTablaSimbolos> tablaSimbolos = Analizador.getTablaSimbolosCompleta();
+//
+//            // Instancia el AnalizadorSintactico
+//            AnalizadorSintactico analizadorSintactico
+//                    = new AnalizadorSintactico(tokens, tablaSimbolos);
+//
+//            // Solo parsear el código para obtener el AST
+//            ProgramaNodo programaAST = analizadorSintactico.parsear(tokens, tablaSimbolos);
+//
+//            if (analizadorSintactico.getErrores().length() > 0) {
+//                System.err.println("Errores durante la compilación:\n");
+//                System.err.println(analizadorSintactico.getErrores().toString());
+//            } else if (programaAST != null) {
+//                System.out.println("Análisis sintáctico completado con éxito.\n");
+//
+//                // === Generación de Código Intermedio (TAC) ===
+//                System.out.println("--- Generando Código Intermedio (Cuádruplos) ---\n");
+//                GeneradorCodigoIntermedio generadorCodigoIntermedio = new GeneradorCodigoIntermedio();
+//                // Pasa el generador al AST para que genere el código
+//                programaAST.generaCodigoIntermedio(generadorCodigoIntermedio);
+//
+//                List<InstruccionTAC> cuadruplos = generadorCodigoIntermedio.getCodigo();
+//                generadorCodigoIntermedio.imprimirCuadruplosEnTabla();
+//
+//                System.out.println("\n--- Generando Código Ensamblador para EMU8086 ---");
+//                List<Analizador.EntradaTablaSimbolos> tablaSimbolosCompleta = Analizador.getTablaSimbolosCompleta();
+//
+//            } else {
+//                System.err.println("Error desconocido: No se pudo construir el AST.");
+//            }
+//
+//        } catch (Exception e) {
+//            System.err.println("¡Ocurrió un error inesperado durante la compilación!");
+//            e.printStackTrace();
+//        }
+//
+//        System.out.println("\n--- Proceso de Compilación Finalizado ---");
         }//GEN-LAST:event_JMTraducirProgramaMouseClicked
 
     private void JMTablaSimbolosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JMTablaSimbolosMouseClicked
@@ -1228,6 +1237,104 @@ public class INTERFAZ extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }//GEN-LAST:event_JMCompilacionMouseClicked
+
+    private void JMOptimizadorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JMOptimizadorMouseClicked
+        try {
+
+            // 1️⃣ TAC SIN OPTIMIZAR
+            List<InstruccionTAC> codigoSinOpt = generador.getCodigoSinOptimizar();
+
+            // 2️⃣ TAC OPTIMIZADO
+            List<InstruccionTAC> codigoOpt = generador.getCodigo();
+
+            // Crear panel con pestañas
+            JTabbedPane tabs = new JTabbedPane();
+
+            // ====================================================
+            // 1) CÓDIGO INTERMEDIO (CUÁDRUPLOS) SIN OPTIMIZAR
+            // ====================================================
+            StringBuilder sb1 = new StringBuilder();
+            sb1.append("===== CÓDIGO INTERMEDIO (SIN OPTIMIZAR) =====\n\n");
+            for (InstruccionTAC tac : codigoSinOpt) {
+                sb1.append(tac.toString()).append("\n");
+            }
+            JTextArea txt1 = new JTextArea(sb1.toString(), 25, 60);
+            txt1.setEditable(false);
+            tabs.addTab("Cuádruplos", new JScrollPane(txt1));
+
+            // ====================================================
+            // 2) CÓDIGO INTERMEDIO (CUÁDUPLOS) OPTIMIZADO
+            // ====================================================
+            StringBuilder sb2 = new StringBuilder();
+            sb2.append("===== CÓDIGO INTERMEDIO (OPTIMIZADO) =====\n\n");
+            for (InstruccionTAC tac : codigoOpt) {
+                sb2.append(tac.toString()).append("\n");
+            }
+            JTextArea txt2 = new JTextArea(sb2.toString(), 25, 60);
+            txt2.setEditable(false);
+            tabs.addTab("Cuádruplos Opt.", new JScrollPane(txt2));
+
+            // ====================================================
+            // 3) TRIPLETAS (SIN OPTIMIZAR)
+            // ====================================================
+            StringBuilder sb3 = new StringBuilder();
+            sb3.append("===== TRIPLETAS (SIN OPTIMIZAR) =====\n\n");
+
+            int id = 0;
+            for (InstruccionTAC tac : codigoSinOpt) {
+                sb3.append(id++)
+                        .append(")  ")
+                        .append((tac.getOperacion() != null ? tac.getOperacion() : ""))
+                        .append("   ")
+                        .append((tac.getArg1() != null ? tac.getArg1() : ""))
+                        .append("   ")
+                        .append((tac.getArg2() != null ? tac.getArg2() : ""))
+                        .append("\n");
+            }
+
+            JTextArea txt3 = new JTextArea(sb3.toString(), 25, 60);
+            txt3.setEditable(false);
+            tabs.addTab("Tripletas", new JScrollPane(txt3));
+
+            // ====================================================
+            // 4) TRIPLETAS (OPTIMIZADAS)
+            // ====================================================
+            StringBuilder sb4 = new StringBuilder();
+            sb4.append("===== TRIPLETAS (OPTIMIZADAS) =====\n\n");
+
+            id = 0;
+            for (InstruccionTAC tac : codigoOpt) {
+                sb4.append(id++)
+                        .append(")  ")
+                        .append((tac.getOperacion() != null ? tac.getOperacion() : ""))
+                        .append("   ")
+                        .append((tac.getArg1() != null ? tac.getArg1() : ""))
+                        .append("   ")
+                        .append((tac.getArg2() != null ? tac.getArg2() : ""))
+                        .append("\n");
+            }
+
+            JTextArea txt4 = new JTextArea(sb4.toString(), 25, 60);
+            txt4.setEditable(false);
+            tabs.addTab("Tripletas Opt.", new JScrollPane(txt4));
+
+            // Mostrar ventana final con pestañas
+            JOptionPane.showMessageDialog(
+                    this,
+                    tabs,
+                    "OPTIMIZACIÓN DE CÓDIGO INTERMEDIO",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Error al generar optimización: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }//GEN-LAST:event_JMOptimizadorMouseClicked
 
     private String generarTextoAST(Object nodo, int nivel) {
         StringBuilder sb = new StringBuilder();
@@ -1985,6 +2092,7 @@ public class INTERFAZ extends javax.swing.JFrame {
     private javax.swing.JMenu JMCompilacion;
     private javax.swing.JMenu JMCompilar;
     private javax.swing.JMenu JMEjecutar;
+    private javax.swing.JMenu JMOptimizador;
     private javax.swing.JMenu JMSintactico;
     private javax.swing.JMenu JMTablaSimbolos;
     private javax.swing.JMenu JMTraducirPrograma;

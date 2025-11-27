@@ -116,6 +116,14 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="JMTraducirProgramaMouseClicked"/>
           </Events>
         </Menu>
+        <Menu class="javax.swing.JMenu" name="JMOptimizador">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Optimizador"/>
+          </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="JMOptimizadorMouseClicked"/>
+          </Events>
+        </Menu>
       </SubComponents>
     </Menu>
   </NonVisualComponents>
